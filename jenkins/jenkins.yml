@@ -1,0 +1,29 @@
+pipeline {
+    agent { label "agentdev"}
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                echo 'Checking out the repository...'
+                git url: "https://github.com/dev9913/Mood-App-React.git", branch: "main"
+                echo "Checkout Success."
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo 'Building Docker image...'
+                sh "docker build -t mymoodapp:latest ."
+                echo "Docker Build Success."
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                echo 'Running the container on browser...'
+                sh "docker run -d -p 3000:3000 mymoodapp:latest"
+                echo "Container Running Success."
+            }
+        }
+    }
+}
